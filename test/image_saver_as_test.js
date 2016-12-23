@@ -1,8 +1,15 @@
 'use strict';
 
-function getDataUri(image){
+function getDataUri(
+    image,
+    name,
+    quality
+){
     var canvas;
-    if(image.tagName !== 'canvas'){
+    var type = 'image/png';
+    var tagName = image.tagName.toLowerCase();
+
+    if(tagName !== 'canvas'){
         canvas = document.createElement('canvas');
        canvas.width = image.naturalWidth; // or 'width' if you want a special/scaled size
        canvas.height = image.naturalHeight; // or 'height' if you want a special/scaled size
@@ -17,7 +24,11 @@ function getDataUri(image){
     //callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
 
     // ... or get as Data URI
-    return canvas.toDataURL('image/png');
+    //return canvas.toDataURL('image/png');
+    if(/.jpg$/.test(name)){
+        type = 'image/jpg';
+    }
+    return canvas.toDataURL(type, quality);
 }
 
 function fireClick(link){
@@ -595,9 +606,9 @@ var ImagesSaver = (function (Emitter$$1) {
         link.addEventListener('touchstart', onDown, false);
 
         var saver = {
-            saveAs: function(image, name){
+            saveAs: function(image, name, quality){
                 if(!image) { return; }
-                link.href = getDataUri(image);
+                link.href = getDataUri(image, name, quality);
                 link.download = name;
                 input.value = name;
             }
@@ -652,3 +663,30 @@ var saver = imageSaver(
 saver.on('save', function (ready){
     ready.saveAs(document.querySelector('#view img'), 'mypicture.png');
 });
+
+setupCanvas();
+
+var canvas_saver = imageSaver('#save-canvas', {
+    html: 'Save Canvas'
+});
+
+canvas_saver.on('save', function (ready){
+    ready.saveAs(
+        document.querySelector('#c'),
+        'mypicture.png'
+    );
+});
+
+
+function setupCanvas(){
+    var c = document.querySelector('#c');
+    var ctx = c.getContext("2d");
+
+    for (var i = 0; i < 6; i++) {
+        for (var j = 0; j < 6; j++) {
+          ctx.fillStyle = 'rgb(' + Math.floor(255 - 42.5 * i) + ',' +
+                           Math.floor(255 - 42.5 * j) + ',0)';
+          ctx.fillRect(j * 25, i * 25, 25, 25);
+        }
+      }
+}

@@ -46,9 +46,9 @@ export default class ImagesSaver extends Emitter {
         link.addEventListener('touchstart', onDown, false);
 
         const saver = {
-            saveAs: function(image, name){
+            saveAs: function(image, name, quality){
                 if(!image) return;
-                link.href = getDataUri(image);
+                link.href = getDataUri(image, name, quality);
                 link.download = name;
                 input.value = name;
             }

@@ -1,8 +1,15 @@
 define('dom-image-file', ['exports'], function (exports) { 'use strict';
 
-function getDataUri(image){
+function getDataUri(
+    image,
+    name,
+    quality
+){
     var canvas;
-    if(image.tagName !== 'canvas'){
+    var type = 'image/png';
+    var tagName = image.tagName.toLowerCase();
+
+    if(tagName !== 'canvas'){
         canvas = document.createElement('canvas');
        canvas.width = image.naturalWidth; // or 'width' if you want a special/scaled size
        canvas.height = image.naturalHeight; // or 'height' if you want a special/scaled size
@@ -17,7 +24,11 @@ function getDataUri(image){
     //callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
 
     // ... or get as Data URI
-    return canvas.toDataURL('image/png');
+    //return canvas.toDataURL('image/png');
+    if(/.jpg$/.test(name)){
+        type = 'image/jpg';
+    }
+    return canvas.toDataURL(type, quality);
 }
 
 function fireClick(link){
@@ -917,9 +928,9 @@ var ImagesSaver = (function (Emitter$$1) {
         link.addEventListener('touchstart', onDown, false);
 
         var saver = {
-            saveAs: function(image, name){
+            saveAs: function(image, name, quality){
                 if(!image) { return; }
-                link.href = getDataUri(image);
+                link.href = getDataUri(image, name, quality);
                 link.download = name;
                 input.value = name;
             }
