@@ -1,4 +1,5 @@
 import { Emitter } from 'more-events';
+import { select } from 'dom-set';
 import getDataUri from './get_data_uri.js';
 import css from 'dom-css';
 import isInput from './is_input.js';
@@ -10,6 +11,8 @@ import setHTML from './set_html.js';
 export default class ImagesSaver extends Emitter {
     constructor(input, options){
         super();
+
+        input = select(input);
 
         if(!isInput(input)){
             throw new TypeError(`${input} is not an input element.`);

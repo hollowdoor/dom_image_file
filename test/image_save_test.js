@@ -359,6 +359,46 @@ MoreEvents.prototype = {
 
 var Emitter = MoreEvents;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+/**
+ * Returns `true` if provided input is Element.
+ * @name isElement
+ * @param {*} [input]
+ * @returns {boolean}
+ */
+var isElement = function (input) {
+  return input != null && (typeof input === 'undefined' ? 'undefined' : _typeof(input)) === 'object' && input.nodeType === 1 && _typeof(input.style) === 'object' && _typeof(input.ownerDocument) === 'object';
+};
+
+function select(selector){
+    if(typeof selector === 'string'){
+        try{
+            return document.querySelector(selector);
+        }catch(e){
+            throw e;
+        }
+    }else if(isElement(selector)){
+        return selector;
+    }
+}
+
+function resolveElement(element, noThrow){
+    if(typeof element === 'string'){
+        try{
+            return document.querySelector(element);
+        }catch(e){
+            throw e;
+        }
+
+    }
+
+    if(!isElement(element) && !noThrow){
+        throw new TypeError((element + " is not a DOM element."));
+    }
+    return element;
+}
+
 function isInput(input){
     if(typeof input === 'object'){
         if(input['tagName'] && input.tagName.toLowerCase() === 'input'){
@@ -404,6 +444,8 @@ var ImageOpener = (function (Emitter$$1) {
         Emitter$$1.call(this);
         //<input type="file" name="file" id="file" class="inputfile" />
         //<label for="file">Choose a file</label>
+
+        input = select(input);
 
         if(!isInput(input)){
             throw new TypeError((input + " is not an input element."));
@@ -541,6 +583,8 @@ var ImagesSaver = (function (Emitter$$1) {
         var this$1 = this;
 
         Emitter$$1.call(this);
+
+        input = select(input);
 
         if(!isInput(input)){
             throw new TypeError((input + " is not an input element."));

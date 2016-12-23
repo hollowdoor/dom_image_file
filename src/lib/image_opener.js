@@ -1,5 +1,6 @@
 import css from 'dom-css';
 import { Emitter } from 'more-events';
+import { select } from 'dom-set';
 import isInput from './is_input.js';
 //import hideInput from './hide_input.js';
 import transformInput from './transform_input.js';
@@ -10,6 +11,8 @@ export default class ImageOpener extends Emitter {
         super();
         //<input type="file" name="file" id="file" class="inputfile" />
         //<label for="file">Choose a file</label>
+
+        input = select(input);
 
         if(!isInput(input)){
             throw new TypeError(`${input} is not an input element.`);
