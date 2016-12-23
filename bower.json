@@ -1,0 +1,20 @@
+{
+  "name": "dom-image-file",
+  "description": "Do image file operation",
+  "main": "dist/dom-image-file.min.js",
+  "keywords": [
+      "image",
+      "dom",
+      "html"
+  ],
+  "authors": [
+    "Quentin Engles"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/hollowdoor/dom_image_file",
+  "ignore": [
+    ".jshintignore",
+    ".gitignore",
+    "README.md"
+  ]
+}
